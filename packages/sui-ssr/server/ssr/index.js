@@ -63,7 +63,7 @@ export default (req, res, next) => {
 
       res.type('html')
       res.write(criticalHTML)
-      res.flush()
+      res.flushHeaders()
 
       const context = await contextFactory(
         createServerContextFactoryParams(req)
@@ -90,14 +90,13 @@ export default (req, res, next) => {
 
       const helmet = Helmet.renderStatic()
 
-      const { bodyAttributes, htmlAttributes, ...head } = helmet
-
+      const { bodyAttributes, ...head } = helmet
       res.write(
         Object.keys(head)
           .map(section => head[section].toString())
           .join('')
       )
-      res.flush()
+      res.flushHeaders()
 
       res.end(
         `</head>${bodyHTML}`
